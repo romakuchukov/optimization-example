@@ -46,8 +46,7 @@ app.update = function (timestamp) {
   for (var i = 0; i < app.count; i++) {
     var m = movers[i];
     if (!app.optimize) {
-      var pos = m.classList.contains('down') ?
-          m.offsetTop + distance : m.offsetTop - distance;
+      var pos = m.classList.contains('down') ? m.offsetTop + distance : m.offsetTop - distance;
       if (pos < 0) pos = 0;
       if (pos > maxHeight) pos = maxHeight;
       m.style.top = pos + 'px';
@@ -60,7 +59,7 @@ app.update = function (timestamp) {
         m.classList.add('up');
       }
     } else {
-      var pos = parseInt(m.style.top.slice(0, m.style.top.indexOf('px')));
+      var pos = parseInt(m.style.top, 10);
       m.classList.contains('down') ? pos += distance : pos -= distance;
       if (pos < 0) pos = 0;
       if (pos > maxHeight) pos = maxHeight;
