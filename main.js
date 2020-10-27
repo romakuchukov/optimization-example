@@ -1,14 +1,14 @@
 let frame;
 let movers;
-let incrementor = 10;
+let incrementor = 100;
 
 const app = {};
 const proto = document.querySelector('.proto');
 
-const bodySize = document.body.getBoundingClientRect();
-const ballSize = proto.getBoundingClientRect();
+let bodySize = document.body.getBoundingClientRect();
+let ballSize = proto.getBoundingClientRect();
 
-const maxHeight = Math.floor(bodySize.height - ballSize.height);
+let maxHeight = Math.floor(bodySize.height - ballSize.height);
 const maxWidth = 97; // 100vw - width of square (3vw)
 
 const distance = 3;
