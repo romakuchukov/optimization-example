@@ -1,18 +1,24 @@
-var app = {},
-    proto = document.querySelector('.proto'),
-    movers,
-    bodySize = document.body.getBoundingClientRect(),
-    ballSize = proto.getBoundingClientRect(),
-    maxHeight = Math.floor(bodySize.height - ballSize.height),
-    maxWidth = 97, // 100vw - width of square (3vw)
-    incrementor = 10,
-    distance = 3,
-    frame,
-    minimum = 10,
-    add = document.querySelector('.add');
+let frame;
+let movers;
+let incrementor = 10;
 
-app.count = minimum;
+const app = {};
+const proto = document.querySelector('.proto');
+
+const bodySize = document.body.getBoundingClientRect();
+const ballSize = proto.getBoundingClientRect();
+
+const maxHeight = Math.floor(bodySize.height - ballSize.height);
+const maxWidth = 97; // 100vw - width of square (3vw)
+
+const distance = 3;
+const add = document.querySelector('.add');
+
+
+app.count = 10;
 app.enableApp = true;
+
+
 
 app.init = function () {
   if (movers) {
@@ -26,35 +32,35 @@ app.init = function () {
     maxHeight = Math.floor(bodySize.height - ballSize.height);
   }
   for (var i = 0; i < app.count; i++) {
-    var m = proto.cloneNode();
+    var mover = proto.cloneNode();
     var top = Math.floor(Math.random() * (maxHeight));
     if (top === maxHeight) {
-      m.classList.add('up');
+      mover.classList.add('up');
     } else {
-      m.classList.add('down');
+      mover.classList.add('down');
     }
-    m.style.left = (i / (app.count / maxWidth)) + 'vw';
-    m.style.top = top + 'px';
-    document.body.appendChild(m);
+    mover.style.left = (i / (app.count / maxWidth)) + 'vw';
+    mover.style.top = top + 'px';
+    document.body.appendChild(mover);
   }
   movers = document.querySelectorAll('.mover');
 };
 
 app.update = function (timestamp) {
   for (var i = 0; i < app.count; i++) {
-    var m = movers[i];
-    var pos = parseInt(m.style.top, 10);
-    m.classList.contains('down') ? pos += distance : pos -= distance;
+    var mover = movers[i];
+    var pos = parseInt(mover.style.top, 10);
+    mover.classList.contains('down') ? pos += distance : pos -= distance;
     if (pos < 0) pos = 0;
     if (pos > maxHeight) pos = maxHeight;
-    m.style.top = pos + 'px';
+    mover.style.top = pos + 'px';
     if (pos === 0) {
-      m.classList.remove('up');
-      m.classList.add('down');
+      mover.classList.remove('up');
+      mover.classList.add('down');
     }
     if (pos === maxHeight) {
-      m.classList.remove('down');
-      m.classList.add('up');
+      mover.classList.remove('down');
+      mover.classList.add('up');
     }
   }
   frame = window.requestAnimationFrame(app.update);
