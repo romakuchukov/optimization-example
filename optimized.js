@@ -53,7 +53,6 @@ app.update = function (timestamp) {
   app.frame = window.requestAnimationFrame(app.update);
 }
 
-
 document.querySelector('.stop').addEventListener('click', function (e) {
   if (app.enableApp) {
     cancelAnimationFrame(app.frame);
