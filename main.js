@@ -1,40 +1,27 @@
-let frame;
-let movers;
-let incrementor = 100;
-
-const app = {};
-const proto = document.querySelector('.proto');
-
-let bodySize = document.body.getBoundingClientRect();
-let ballSize = proto.getBoundingClientRect();
-
-let maxHeight = Math.floor(bodySize.height - ballSize.height);
-const maxWidth = 97; // 100vw - width of square (3vw)
-
-const distance = 3;
-const add = document.querySelector('.add');
-
-
-app.count = 100;
-app.enableApp = true;
-
+import {
+  app,
+  add,
+  proto,
+  distance,
+  maxWidth
+} from './appVars';
 
 
 app.init = function () {
-  if (movers) {
-    bodySize = document.body.getBoundingClientRect();
-    for (var i = 0; i < movers.length; i++) {
-      document.body.removeChild(movers[i]);
+  if (app.movers) {
+    app.bodySize = document.body.getBoundingClientRect();
+    for (var i = 0; i < app.movers.length; i++) {
+      document.body.removeChild(app.movers[i]);
     }
     document.body.appendChild(proto);
-    ballSize = proto.getBoundingClientRect();
+    app.ballSize = proto.getBoundingClientRect();
     document.body.removeChild(proto);
-    maxHeight = Math.floor(bodySize.height - ballSize.height);
+    app.maxHeight = Math.floor(app.bodySize.height - app.ballSize.height);
   }
   for (var i = 0; i < app.count; i++) {
     var mover = proto.cloneNode();
-    var top = Math.floor(Math.random() * (maxHeight));
-    if (top === maxHeight) {
+    var top = Math.floor(Math.random() * (app.maxHeight));
+    if (top === app.maxHeight) {
       mover.classList.add('up');
     } else {
       mover.classList.add('down');
@@ -43,45 +30,46 @@ app.init = function () {
     mover.style.top = top + 'px';
     document.body.appendChild(mover);
   }
-  movers = document.querySelectorAll('.mover');
+  app.movers = document.querySelectorAll('.mover');
 };
 
 app.update = function (timestamp) {
   for (var i = 0; i < app.count; i++) {
-    var mover = movers[i];
+    var mover = app.movers[i];
     var pos = mover.classList.contains('down') ? mover.offsetTop + distance : mover.offsetTop - distance;
+
     if (pos < 0) pos = 0;
-    if (pos > maxHeight) pos = maxHeight;
+    if (pos > app.maxHeight) pos = app.maxHeight;
     mover.style.top = pos + 'px';
     if (mover.offsetTop === 0) {
       mover.classList.remove('up');
       mover.classList.add('down');
     }
-    if (mover.offsetTop === maxHeight) {
+    if (mover.offsetTop === app.maxHeight) {
       mover.classList.remove('down');
       mover.classList.add('up');
     }
   }
-  frame = window.requestAnimationFrame(app.update);
+  app.frame = window.requestAnimationFrame(app.update);
 }
 
 document.querySelector('.stop').addEventListener('click', function (e) {
   if (app.enableApp) {
-    cancelAnimationFrame(frame);
+    cancelAnimationFrame(app.frame);
     e.target.textContent = 'Start';
     app.enableApp = false;
   } else {
-    frame = window.requestAnimationFrame(app.update);
+    app.frame = window.requestAnimationFrame(app.update);
     e.target.textContent = 'Stop';
     app.enableApp = true;
   }
 });
 
 add.addEventListener('click', function (e) {
-  cancelAnimationFrame(frame);
-  app.count += incrementor;
+  cancelAnimationFrame(app.frame);
+  app.count += app.incrementor;
   app.init();
-  frame = requestAnimationFrame(app.update);
+  app.frame = requestAnimationFrame(app.update);
 });
 
 function debounce(func, wait, immediate) {
@@ -101,17 +89,17 @@ function debounce(func, wait, immediate) {
 
 var onResize = debounce(function () {
   if (app.enableApp) {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(app.frame);
       app.init();
-      frame = requestAnimationFrame(app.update);
+      app.frame = requestAnimationFrame(app.update);
   }
 }, 500);
 
 window.addEventListener('resize', onResize);
 
-add.textContent = 'Add ' + incrementor;
+add.textContent = 'Add ' + app.incrementor;
 document.body.removeChild(proto);
 proto.classList.remove('.proto');
 app.init();
 window.app = app;
-frame = window.requestAnimationFrame(app.update);
+app.frame = window.requestAnimationFrame(app.update);
