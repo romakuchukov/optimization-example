@@ -43,15 +43,16 @@ app.init = function () {
 app.update = function (timestamp) {
   for (var i = 0; i < app.count; i++) {
     var m = movers[i];
-    var pos = m.classList.contains('down') ? m.offsetTop + distance : m.offsetTop - distance;
+    var pos = parseInt(m.style.top, 10);
+    m.classList.contains('down') ? pos += distance : pos -= distance;
     if (pos < 0) pos = 0;
     if (pos > maxHeight) pos = maxHeight;
     m.style.top = pos + 'px';
-    if (m.offsetTop === 0) {
+    if (pos === 0) {
       m.classList.remove('up');
       m.classList.add('down');
     }
-    if (m.offsetTop === maxHeight) {
+    if (pos === maxHeight) {
       m.classList.remove('down');
       m.classList.add('up');
     }
