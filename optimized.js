@@ -15,7 +15,7 @@ const distance = 3;
 const add = document.querySelector('.add');
 
 
-app.count = 10;
+app.count = 100;
 app.enableApp = true;
 
 
