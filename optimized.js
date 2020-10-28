@@ -10,7 +10,7 @@ import {
 app.init = function () {
   if (app.movers) {
     app.bodySize = document.body.getBoundingClientRect();
-    for (var i = 0; i < app.movers.length; i++) {
+    for (let i = 0; i < app.movers.length; i++) {
       document.body.removeChild(app.movers[i]);
     }
     document.body.appendChild(proto);
@@ -18,9 +18,9 @@ app.init = function () {
     document.body.removeChild(proto);
     app.maxHeight = Math.floor(app.bodySize.height - app.ballSize.height);
   }
-  for (var i = 0; i < app.count; i++) {
-    var mover = proto.cloneNode();
-    var top = Math.floor(Math.random() * (app.maxHeight));
+  for (let i = 0; i < app.count; i++) {
+    const mover = proto.cloneNode();
+    const top = Math.floor(Math.random() * (app.maxHeight));
     if (top === app.maxHeight) {
       mover.classList.add('up');
     } else {
@@ -34,9 +34,9 @@ app.init = function () {
 };
 
 app.update = function (timestamp) {
-  for (var i = 0; i < app.count; i++) {
-    var mover = app.movers[i];
-    var pos = parseInt(mover.style.top, 10);
+  for (let i = 0; i < app.count; i++) {
+    const mover = app.movers[i];
+    let pos = parseInt(mover.style.top, 10);
     mover.classList.contains('down') ? pos += distance : pos -= distance;
     if (pos < 0) pos = 0;
     if (pos > app.maxHeight) pos = app.maxHeight;
@@ -73,21 +73,21 @@ add.addEventListener('click', function (e) {
 });
 
 function debounce(func, wait, immediate) {
-  var timeout;
+  let timeout;
   return function() {
-    var context = this, args = arguments;
-    var later = function() {
+    const context = this, args = arguments;
+    const later = function() {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
-    var callNow = immediate && !timeout;
+    const callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
   };
 };
 
-var onResize = debounce(function () {
+const onResize = debounce(function () {
   if (app.enableApp) {
       cancelAnimationFrame(app.frame);
       app.init();
