@@ -7,7 +7,7 @@ import {
 } from './appVars';
 
 
-app.init = function () {
+app.init = () => {
   if (app.movers) {
     app.bodySize = document.body.getBoundingClientRect();
     for (let i = 0; i < app.movers.length; i++) {
@@ -33,7 +33,7 @@ app.init = function () {
   app.movers = document.querySelectorAll('.mover');
 };
 
-app.update = function (timestamp) {
+app.update = (timestamp) => {
   for (let i = 0; i < app.count; i++) {
     const mover = app.movers[i];
     let pos = mover.classList.contains('down') ? mover.offsetTop + distance : mover.offsetTop - distance;
@@ -53,7 +53,7 @@ app.update = function (timestamp) {
   app.frame = window.requestAnimationFrame(app.update);
 }
 
-document.querySelector('.stop').addEventListener('click', function (e) {
+document.querySelector('.stop').addEventListener('click', (e) => {
   if (app.enableApp) {
     cancelAnimationFrame(app.frame);
     e.target.textContent = 'Start';
@@ -65,29 +65,29 @@ document.querySelector('.stop').addEventListener('click', function (e) {
   }
 });
 
-add.addEventListener('click', function (e) {
+add.addEventListener('click', (e) => {
   cancelAnimationFrame(app.frame);
   app.count += app.incrementor;
   app.init();
   app.frame = requestAnimationFrame(app.update);
 });
 
-function debounce(func, wait, immediate) {
+const debounce = (func, wait, immediate) => {
   let timeout;
-  return function() {
-    const context = this, args = arguments;
-    const later = function() {
+  return () => {
+    const args = arguments;
+    const later = () => {
       timeout = null;
-      if (!immediate) func.apply(context, args);
+      if (!immediate) func.apply(null, args);
     };
     const callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
+    if (callNow) func.apply(null, args);
   };
 };
 
-const onResize = debounce(function () {
+const onResize = debounce(() => {
   if (app.enableApp) {
       cancelAnimationFrame(app.frame);
       app.init();
